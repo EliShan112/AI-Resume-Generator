@@ -1,39 +1,50 @@
 "use client"
 
-import React, { useState } from 'react'
-import { useSession } from 'next-auth/react'
-import { useRouter } from 'next/navigation'
+import React from "react"
+import { useSession } from "next-auth/react"
+import { useRouter } from "next/navigation"
+import { motion } from "framer-motion"
 
 const HomeSection = () => {
+  const { data: session, status } = useSession()
+  const router = useRouter()
 
-  const {data: session, status} = useSession();
-  const router = useRouter();
-
-  const handleClick = () =>{
-    if(status == 'authenticated'){
-      router.push('/resume')
-    }
-    else{
-      router.push('/login')
+  const handleClick = () => {
+    if (status === "authenticated") {
+      router.push("/resume/form")
+    } else {
+      router.push("/login")
     }
   }
 
-
   return (
-    <div className=" h-[100vh] flex flex-col justify-center items-center p-4 md:p-10 shadow-2xl">
-      <div className=' shadow-2xl p-20 py-30 rounded-2xl flex flex-col'>
-        <h1 className="text-3xl md:text-5xl font-bold mb-4 text-black text-center ">
-        AI Resume Generator
-      </h1>
-      <p className="text-base md:text-lg max-w-md md:max-w-xl text-center text-black p-4">
-        Create ATS-friendly resumes in seconds using AI.
-      </p>
-        <button onClick={handleClick} className="mt-3 p-3 bg-blue-500 text-black rounded-3xl hover:bg-blue-600 transition cursor-pointer text-xl">
-          Create your resume
-        </button>
-      </div>
-      
+    <div className="h-screen w-full flex justify-center items-center relative overflow-hidden">
 
+      {/* Animated gradient circles */}
+      <div className="absolute w-[500px] h-[500px] bg-white opacity-10 rounded-full top-0 -left-20 blur-3xl animate-pulse"></div>
+      <div className="absolute w-[600px] h-[600px] bg-white opacity-10 rounded-full bottom-0 -right-20 blur-3xl animate-pulse delay-200"></div>
+
+      <motion.div
+        className="bg-white/20 backdrop-blur-lg border border-white/30 shadow-2xl rounded-3xl p-10 md:p-16 w-[90%] max-w-xl text-center"
+        initial={{ opacity: 0, y: 30 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.7 }}
+      >
+        <h1 className="text-4xl md:text-5xl font-extrabold text-white mb-4 drop-shadow-lg">
+          AI Resume Generator
+        </h1>
+        <p className="text-md md:text-lg text-white/90 mb-6 font-light">
+          Instantly create professional, ATS-friendly resumes using the power of AI.
+        </p>
+        <motion.button
+          onClick={handleClick}
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+          className="bg-white text-purple-700 font-semibold cursor-pointer px-6 py-3 rounded-full shadow-md hover:bg-purple-100 transition duration-300"
+        >
+          Create Your Resume
+        </motion.button>
+      </motion.div>
     </div>
   )
 }
